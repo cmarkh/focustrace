@@ -7,13 +7,13 @@ pub fn setup() {
 }
 
 fn filter_backtrace(bt: &backtrace::Backtrace) {
-    let crate_name = env!("CARGO_PKG_NAME");
+    let crate_name = std::env::var("CARGO_PKG_NAME").unwrap();
 
     for frame in bt.frames() {
         for symbol in frame.symbols() {
             if let Some(function) = symbol.name() {
                 let function = function.to_string();
-                if function.contains(crate_name) {
+                if function.contains(&crate_name) {
                     let file = match symbol.filename() {
                         Some(file) => match file.to_str() {
                             Some(file) => file
